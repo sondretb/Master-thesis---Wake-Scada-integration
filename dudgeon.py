@@ -18,6 +18,6 @@ coordinates_sas = os.environ.get('COORDINATES_SAS')
 dataframe = pd.read_csv(coordinates_sas, sep=";")
 
 
-WT_X = dataframe['Longitude'].to_numpy()*111111 # estimate
-WT_Y = dataframe['Latitude'].to_numpy()*111111  # estimate
+WT_X = dataframe['Longitude'].to_numpy()*111320 # estimate
+WT_Y = dataframe['Latitude'].to_numpy()*111320  # estimate
 
