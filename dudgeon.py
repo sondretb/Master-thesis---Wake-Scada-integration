@@ -15,6 +15,7 @@ blob_client = storage_service.get_blob_client(container='preliminarydata', blob=
 """
 
 coordinates_sas = os.environ.get('COORDINATES_SAS')
+print(coordinates_sas)
 dataframe = pd.read_csv(coordinates_sas, sep=";")
 
 degree_to_meter_factor = 111100

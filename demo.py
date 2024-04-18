@@ -89,9 +89,6 @@ def plot_DOW(deficit_model: DeficitModel, deflection_model: DeflectionModel, tur
     plt.figure(wfm.__class__.__name__, figsize=(4, 4))
     plt.title("Wake deficit model: " + wfm.__class__.__name__)
 
-    if not (wfm.__class__ == Jensen_1983):
-        center_line = flow_map.min_WS_eff()
-        plt.plot(center_line.x/D, center_line/D,'--k')
 
     flow_map.plot_wake_map(normalize_with=D)
 
@@ -102,13 +99,8 @@ def plot_DOW(deficit_model: DeficitModel, deflection_model: DeflectionModel, tur
 
     plt.show()
 
-
-
-
-
-
 plot_DOW(deficit_model=BastankhahGaussian, 
                   deflection_model=JimenezWakeDeflection, 
                   turbulence_model=STF2017TurbulenceModel,
-                  wd=290, ws=5)
+                  wd=290, ws=5, yaw=[10,10,10]+[ 0 for _ in range(len(WT_Y)-3)])
 
