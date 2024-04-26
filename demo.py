@@ -9,10 +9,13 @@ from py_wake.deficit_models.deficit_model import DeficitModel
 from siemens6MW import Siemens6MW
 from py_wake.site import UniformSite
 import matplotlib.pyplot as plt
+from matplotlib.patches import Circle
 from py_wake.examples.data.iea37._iea37 import IEA37Site
 from py_wake.examples.data.hornsrev1 import V80
+from py_wake.wind_turbines import WindTurbines
 import pandas as pd
-from dudgeon import WT_X, WT_Y
+from dudgeon import WT_X, WT_Y, NAMES
+from typing import List
 
 
 
@@ -74,6 +77,8 @@ def plot_DOW(deficit_model: DeficitModel, deflection_model: DeflectionModel, tur
         plot_turbulence = True
 
     windTurbines = V80()
+    dow_windturbines = WindTurbines(names=NAMES, diameters=[154 for _ in range(len(NAMES))], hub_heights=[110 for _ in range(len(NAMES))], powerCtFunctions=[windTurbines.powerCtFunction]*len(NAMES))
+
     site = IEA37Site()
     D = windTurbines.diameter()
 
@@ -91,16 +96,41 @@ def plot_DOW(deficit_model: DeficitModel, deflection_model: DeflectionModel, tur
 
 
     flow_map.plot_wake_map(normalize_with=D)
+    
 
     if plot_turbulence:
-        plt.figure(turbulenceModel.__class__.__name__, figsize=(4*turbine_amount, 4))
+        plt.figure(turbulenceModel.__class__.__name__, figsize=(4, 4))
         plt.title("Turbulence Model: " + turbulenceModel.__class__.__name__)
         flow_map.plot(flow_map.TI_eff, clabel="Added turbulence intensity [-]", levels=100, cmap="Blues", normalize_with=D)
 
     plt.show()
 
-plot_DOW(deficit_model=BastankhahGaussian, 
+
+
+def plot_DOW_layout(highlight: List[str] | str = [], color ='b', highlight_color = 'r'):
+    ax = plt.gca()
+    r = int(154/2)
+
+    for name, x, y in zip(NAMES, WT_X, WT_Y):
+        marker = 'o'+color
+        if name in highlight:
+            marker = 'o'+highlight_color
+        ax.annotate(name, (x+r*1.5, y+r*1.5), fontsize=7)
+        plt.plot(x, y, marker)
+
+    plt.show()
+
+
+
+
+
+
+if __name__ == '__main__':
+    
+    plot_DOW(deficit_model=BastankhahGaussian, 
                   deflection_model=JimenezWakeDeflection, 
                   turbulence_model=STF2017TurbulenceModel,
-                  wd=290, ws=5, yaw=[10,10,10]+[ 0 for _ in range(len(WT_Y)-3)])
+                  wd=290, ws=10, yaw=[0,0,0]+[ 0 for _ in range(len(WT_Y)-3)])
+                  
+    pass
 
