@@ -16,6 +16,7 @@ from py_wake.wind_turbines import WindTurbines
 import pandas as pd
 from dudgeon import WT_X, WT_Y, NAMES
 from typing import List
+import numpy as np
 
 
 
@@ -115,22 +116,23 @@ def plot_DOW_layout(highlight: List[str] | str = [], color ='b', highlight_color
         marker = 'o'+color
         if name in highlight:
             marker = 'o'+highlight_color
-        ax.annotate(name, (x+r*1.5, y+r*1.5), fontsize=7)
+        ax.annotate(name, (x+r*1.3, y+r*1.5), fontsize=7)
         plt.plot(x, y, marker)
-
+    plt.title('DOW Layout')
+    
     plt.show()
 
 
 
 
 
-
 if __name__ == '__main__':
-    
+    """
     plot_DOW(deficit_model=BastankhahGaussian, 
                   deflection_model=JimenezWakeDeflection, 
                   turbulence_model=STF2017TurbulenceModel,
                   wd=290, ws=10, yaw=[0,0,0]+[ 0 for _ in range(len(WT_Y)-3)])
-                  
-    pass
+                """
+    plot_DOW_layout()  
+    
 
