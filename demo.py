@@ -1,12 +1,11 @@
 from py_wake.literature.noj import Jensen_1983
 from py_wake import BastankhahGaussian
 from py_wake.literature.gaussian_models import Bastankhah_PorteAgel_2014
-from py_wake.turbulence_models import STF2017TurbulenceModel
+from py_wake.turbulence_models import STF2017TurbulenceModel, GCLTurbulence, STF2005TurbulenceModel
 from py_wake.utils.plotting import setup_plot
 from py_wake.deflection_models import JimenezWakeDeflection, DeflectionModel
 from py_wake.turbulence_models import TurbulenceModel
 from py_wake.deficit_models.deficit_model import DeficitModel
-from siemens6MW import Siemens6MW
 from py_wake.site import UniformSite
 import matplotlib.pyplot as plt
 from matplotlib.patches import Circle
@@ -20,7 +19,7 @@ import numpy as np
 
 
 
-def plot_flowmap_demo(deficit_model: DeficitModel, deflection_model: DeflectionModel, turbulence_model: TurbulenceModel, yaw=None, ws=10, wd=270):
+def plot_flowmap_demo(deficit_model: DeficitModel, deflection_model: DeflectionModel, turbulence_model: TurbulenceModel, yaw=None, ws=10, wd=270, ti = 0):
     if yaw:
         turbine_amount = len(yaw)
         wt_x = [1000*i for i in range(turbine_amount)]
@@ -33,12 +32,15 @@ def plot_flowmap_demo(deficit_model: DeficitModel, deflection_model: DeflectionM
         print("can't plot turbulence, no model specified")
     else:
         turbulenceModel = turbulence_model()
+        plot_turbulence = True
+
 
     windTurbines = V80()
-    site = IEA37Site()
+    site = IEA37Site(ti=ti)
     D = windTurbines.diameter()
 
     wfm = deficit_model(site=site, windTurbines=windTurbines, deflectionModel=deflection_model(), turbulenceModel = turbulenceModel)
+
 
     sim_results = wfm(x=wt_x, y=wt_y, ws=ws, wd=wd, yaw=yaw, tilt=0)
 
@@ -51,9 +53,6 @@ def plot_flowmap_demo(deficit_model: DeficitModel, deflection_model: DeflectionM
     plt.figure(wfm.__class__.__name__, figsize=(4*turbine_amount, 4))
     plt.title("Wake deficit model: " + wfm.__class__.__name__)
 
-    if not (wfm.__class__ == Jensen_1983):
-        center_line = flow_map.min_WS_eff()
-        plt.plot(center_line.x/D, center_line/D,'--k')
 
     flow_map.plot_wake_map(normalize_with=D)
 
@@ -132,7 +131,15 @@ if __name__ == '__main__':
                   deflection_model=JimenezWakeDeflection, 
                   turbulence_model=STF2017TurbulenceModel,
                   wd=290, ws=10, yaw=[0,0,0]+[ 0 for _ in range(len(WT_Y)-3)])
-                """
-    plot_DOW_layout()  
+                  """
+    
+    #plot_DOW_layout()
+    plot_flowmap_demo(deficit_model=Jensen_1983, 
+                  deflection_model=JimenezWakeDeflection, 
+                  turbulence_model=STF2017TurbulenceModel,
+                  ti=0.05, yaw=[0, 0], wd=270)  
+
+
+
     
 

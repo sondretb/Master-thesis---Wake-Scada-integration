@@ -1,6 +1,7 @@
 import os
 from dotenv import load_dotenv
 from azure.storage.blob import BlobServiceClient
+import pandas as pd
 
 load_dotenv()
 conn_str = os.environ.get("CONNECTION_STRING")
@@ -18,6 +19,7 @@ def download_data():
         with open(file=os.path.join(DATA_DIR, csv_name), mode="wb") as blob_file:
             downloaded_blob = container_client.download_blob(blob=blob_name)
             blob_file.write(downloaded_blob.readall())
+
 
 if __name__ == '__main__':
     download_data()
