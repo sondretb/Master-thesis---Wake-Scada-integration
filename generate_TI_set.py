@@ -43,7 +43,7 @@ def create_simulated_ti_set(ws, wd, ti_0, ts):
 
     ti_df = pd.DataFrame(data=ti_list, columns=_get_column_list(), index=ts)
     ti_df.index.name = 'timestamp'
-    ti_df.to_csv(TI_FILENAME)
+    ti_df.to_csv(ti_filename)
 
 
 if __name__ == '__main__':
