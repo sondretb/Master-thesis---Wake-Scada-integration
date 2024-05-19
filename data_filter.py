@@ -18,6 +18,7 @@ data_labels = [('activepower_DOW_2023_10min_avg', 'ActivePower'),
 def prepare_turbine_seperated_data(turbine_set = NAMES, include_ti = True): #unfiltered
     turbine_seperated_data = {}
     pres_hum = data['DOW_2023_Air_Pres_Hum']
+    temp = data['DOW_2023_AirTemp']
     for code in turbine_set:
         turbine_data = pd.DataFrame()
         for file, dl in data_labels:
@@ -29,16 +30,19 @@ def prepare_turbine_seperated_data(turbine_set = NAMES, include_ti = True): #unf
             turbine_data = turbine_data.rename(columns={f'DOW-{code}-{dl}': dl})
 
         turbine_data = pd.merge(turbine_data, pres_hum, on='timestamp', how='outer')
+        turbine_data = pd.merge(turbine_data, temp, on='timestamp', how='outer')
+        
         turbine_data = timestamp_to_datetime_index(turbine_data)
         if include_ti:
             ti = timestamp_to_datetime_index(data['simulated_ti'][[f'DOW-{code}-TI', 'timestamp']])
             turbine_data = pd.merge(turbine_data, ti, on='timestamp', how='outer')
             turbine_data = turbine_data.rename(columns={f'DOW-{code}-TI': 'TI'})
   
-        turbine_data = turbine_data.rename(columns={'BladeAngleA': 'Pitch', 'NacelleDirection': 'YawAngle', 'DOW-EFS-AirHumidity': 'AirHumidity','DOW-EFS-AirPres': 'AirPressure'})
+        turbine_data = turbine_data.rename(columns={'BladeAngleA': 'Pitch', 'NacelleDirection': 'YawAngle', 'DOW-EFS-AirHumidity': 'AirHumidity','DOW-EFS-AirPres': 'AirPressure', 'DOW-EFS-AirTemp-2m' : 'AirTemp'})
 
         turbine_data['AirHumidity'] = turbine_data['AirHumidity'].ffill()       #because at hourly intervals
         turbine_data['AirPressure'] = turbine_data['AirPressure'].ffill()       #because at hourly intervals
+        turbine_data['AirTemp'] = turbine_data['AirTemp'].ffill()       #because at hourly intervals
 
         turbine_data['TSR'] = (154 * np.pi * turbine_data['GenRPM']/60)/turbine_data['WindSpeed']
         turbine_data['YawOffset'] = turbine_data['WindDirection'] - turbine_data['YawAngle']

@@ -1,7 +1,7 @@
 import os
 from dotenv import load_dotenv
 from azure.storage.blob import BlobServiceClient
-import pandas as pd
+from tqdm import tqdm
 
 load_dotenv()
 conn_str = os.environ.get("CONNECTION_STRING")
@@ -14,7 +14,7 @@ def download_data():
         # Create the directory
         os.makedirs(DATA_DIR)
 
-    for blob_name in container_client.list_blob_names():
+    for blob_name in tqdm(container_client.list_blob_names(), total=13):
         csv_name = blob_name.split('/')[-1]
         with open(file=os.path.join(DATA_DIR, csv_name), mode="wb") as blob_file:
             downloaded_blob = container_client.download_blob(blob=blob_name)
