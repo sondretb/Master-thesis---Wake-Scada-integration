@@ -20,6 +20,10 @@ POWER_CURVE_SWT6_external = PowerCtTabular(u, power, 'kw', ct)
 
 SWT6 = GenericWindTurbine(name='SWT6.0-154', hub_height=110, diameter=154, power_norm=6000, ws_cutout=25)
 
+def power_curve():
+    pc = SWT6.power_ct()[0]
+
+
 def plot_DOW_powercurve():
     X_Y_Spline = make_interp_spline(u[2:31], power[2:31])
 
