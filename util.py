@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 pd.options.mode.copy_on_write = True
 
 
+
 def get_dataframes(print_names=True):
     data = {}
     data_path = './data'
@@ -94,11 +95,12 @@ def get_mean_TI_points():
     ti_y = ti_ws.groupby('ws_bins', observed=True)['DOW-J04-TI'].mean().to_numpy()
     return ws_x, ti_y
 
+ws_x, ti_y = get_mean_TI_points()
+degree = 3
+coefficients = np.polyfit(ws_x, ti_y, degree)
+poly_func = np.poly1d(coefficients)
+
 def ws2ti_0(ws):
-    ws_x, ti_y = get_mean_TI_points()
-    degree = 3
-    coefficients = np.polyfit(ws_x, ti_y, degree)
-    poly_func = np.poly1d(coefficients)
     return poly_func(ws)
 
 
