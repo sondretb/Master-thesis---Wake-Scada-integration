@@ -10,8 +10,8 @@ This is the source code for the plots and case study featured in:\
 The notebooks provide the code used to generate the plots for the case study. \
 
 **_pre_data_analysis.ipynb_** was used for the preliminary data analysis of the case study.\
-**power_predictior**__ was used to visualise the power curve modelling part of the case study.\
-**_wake_deficit_optimization_** was used to execute the wake deficit model optimization part of the case study.\
+_**power_predictior.ipynb**_ was used to visualise the power curve modelling part of the case study.\
+**_wake_deficit_optimization.ipynb_** was used to execute the wake deficit model optimization part of the case study.\
 
 ### Python Scripts
 
