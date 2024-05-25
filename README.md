@@ -1,5 +1,5 @@
 # Sondre Bungum Master thesis source code
-This is the source code for the plots and case study featured in:\
+This is the source code for the plots and case study featured in:
 ### "Integrating SCADA Data and Kinematic Wake Modeling for Enhanced Control Optimization in Offshore Wind Farms: A Study of Hybrid Modeling Solutions using Kinematic Wake Models and SCADA Data"
 
 ### Pre-requisites
@@ -7,7 +7,7 @@ This is the source code for the plots and case study featured in:\
 **_.env.example_** contains a template for the .env file, which was used to obtain the source data from Equinor. This data will not be publicly available.\
 
 ### Python Notebooks
-The notebooks provide the code used to generate the plots for the case study. \
+The notebooks provide the code used to generate the plots for the case study. 
 
 **_pre_data_analysis.ipynb_** was used for the preliminary data analysis of the case study.\
 _**power_predictior.ipynb**_ was used to visualise the power curve modelling part of the case study.\
