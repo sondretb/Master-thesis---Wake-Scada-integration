@@ -4,7 +4,7 @@ This is the source code for the plots and case study featured in:
 
 ### Pre-requisites
 **_requirements.txt_** contains a list of the libraries used. To download all modules, do "pip install -r requirements.txt" in the directory.\
-**_.env.example_** contains a template for the .env file, which was used to obtain the source data from Equinor. This data will not be publicly available.
+**_.env.example_** contains a template for the .env file, which contains the environmental variables that were used to obtain the source data from Equinor. This data will not be publicly available.
 
 ### Python Notebooks
 The notebooks provide the code used to generate the plots for the case study. 
