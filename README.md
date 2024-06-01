@@ -10,13 +10,14 @@ This is the source code for the plots and case study featured in:
 The notebooks provide the code used to generate the plots for the case study. 
 
 **_pre_data_analysis.ipynb_** was used for the "preliminary data analysis" of the case study.\
-_**power_predictior.ipynb**_ was used to visualise the "power curve modelling" part of the case study.\
+_**power_predictior.ipynb**_ was used to visualise the "power curve modelling" part of the case study, as well as the "Coupled power prediction" part.\
 **_wake_deficit_optimization.ipynb_** was used to execute the "wake deficit model optimization" part of the case study.
 ## Python Scripts
 
 _**demo.py**_ is a script made to visualize the different kinematic models, layout, and flowfields in DOW. These plots were used in the "Theory" part of the thesis.\
 **_download_files.py_** is a script made to fetch and download the source data provided by Equinor from Azure.\
 _**generate_TI_set.py**_ is a script that generates the simulated effective TI dataset that was used in the case study.
+_**generate_ws_predictions.py**_ is a script that generates the estimated wind speed data set using the optimal wake deficit model found in the parameter cross-validation. This dataset was used for the coupled power predicitons.
 
 ## Python Modules
 
