@@ -15,7 +15,7 @@ data_labels = [('activepower_DOW_2023_10min_avg', 'ActivePower'),
                ('yaw_angle_DOW_2023_10min_avg', 'NacelleDirection')]
 
 
-def prepare_turbine_seperated_data(turbine_set = NAMES, include_ti = True): #unfiltered
+def prepare_turbine_seperated_data(turbine_set = NAMES, include_ti = True, include_wse=False): #unfiltered
     turbine_seperated_data = {}
     pres_hum = data['DOW_2023_Air_Pres_Hum']
     temp = data['DOW_2023_AirTemp']
@@ -33,16 +33,22 @@ def prepare_turbine_seperated_data(turbine_set = NAMES, include_ti = True): #unf
         turbine_data = pd.merge(turbine_data, temp, on='timestamp', how='outer')
         
         turbine_data = timestamp_to_datetime_index(turbine_data)
+
         if include_ti:
             ti = timestamp_to_datetime_index(data['simulated_ti'][[f'DOW-{code}-TI', 'timestamp']])
             turbine_data = pd.merge(turbine_data, ti, on='timestamp', how='outer')
             turbine_data = turbine_data.rename(columns={f'DOW-{code}-TI': 'TI'})
-  
+
+        if include_wse:
+            wse = timestamp_to_datetime_index(data['windspeed_estimates'][[f'DOW-{code}-WSE', 'timestamp']])
+            turbine_data = pd.merge(turbine_data, wse, on='timestamp', how='outer')
+            turbine_data = turbine_data.rename(columns={f'DOW-{code}-WSE': 'WSE'})
+
         turbine_data = turbine_data.rename(columns={'BladeAngleA': 'Pitch', 'NacelleDirection': 'YawAngle', 'DOW-EFS-AirHumidity': 'AirHumidity','DOW-EFS-AirPres': 'AirPressure', 'DOW-EFS-AirTemp-2m' : 'AirTemp'})
 
         turbine_data['AirHumidity'] = turbine_data['AirHumidity'].ffill()       #because at hourly intervals
         turbine_data['AirPressure'] = turbine_data['AirPressure'].ffill()       #because at hourly intervals
-        turbine_data['AirTemp'] = turbine_data['AirTemp'].ffill()       #because at hourly intervals
+        turbine_data['AirTemp'] = turbine_data['AirTemp'].ffill()               #because at hourly intervals
 
         turbine_data['TSR'] = (154 * np.pi * turbine_data['GenRPM']/60)/turbine_data['WindSpeed']
         turbine_data['YawOffset'] = turbine_data['WindDirection'] - turbine_data['YawAngle']
@@ -52,8 +58,8 @@ def prepare_turbine_seperated_data(turbine_set = NAMES, include_ti = True): #unf
 
     return turbine_seperated_data
 
-def get_filtered_data(turbine_set=NAMES, include_ti = True):
-    all_turbines_data = prepare_turbine_seperated_data(turbine_set, include_ti=include_ti)
+def get_filtered_data(turbine_set=NAMES, include_ti = True, include_wse = False):
+    all_turbines_data = prepare_turbine_seperated_data(turbine_set, include_ti=include_ti, include_wse=include_wse)
 
     def _filter_by_masks(turbine_data):
         #To be excluded
@@ -83,7 +89,7 @@ def get_filtered_data(turbine_set=NAMES, include_ti = True):
 
 if __name__== '__main__':
     turbine_dataxx = prepare_turbine_seperated_data()
-    filtered_data = get_filtered_data()
+    filtered_data = get_filtered_data(include_wse=True)
 
     turbine_dataxx['A01'].plot.scatter(x='WindSpeed', y='ActivePower', edgecolor='gray', alpha=0.6, title='A01 - Raw Measurements')
     #print(turbine_dataxx['A01'].nlargest(n=10, columns='YawOffset', keep='all'))

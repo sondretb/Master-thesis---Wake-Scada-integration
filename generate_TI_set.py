@@ -45,7 +45,6 @@ def create_simulated_ti_set(ws, wd, ti_0, ts):
     ti_df.index.name = 'timestamp'
     ti_df.to_csv(ti_filename)
 
-
 if __name__ == '__main__':
     #_save_to_file()
     param_df = _read_file()
